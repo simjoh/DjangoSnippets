@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- {% load staticfiles %} -->
+<html>
+    <head>
+        <meta charset="utf-8">
+  <!-- Navigation Bar-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <title>ajax example</title>
+    </head>
+    <body>
+
+    </body>
+    
+  <div class="content container">
+      <div class="col-xs-12">
+            {% block content %}
+            <h1>A very basic example</h1>
+            <p>This page should be used within django</p>
+            <p>Change "/path/to/view" to the real destination</p>
+            <p>
+                <ul>At the destination do some looping, sleeping or wathever and this will work</ul>
+                <ul>Lista över rum där någon ska flytta ut de närmaste 3 månaderna</ul>
+                <ul>Lista över bokningar som inte är bekräftade med utskrift/underskrift.</ul>
+            </p>
+            {% endblock content%}
+        <form id="filterform" action="/lattlagrat/callapi/" method="post">
+        {% csrf_token %}
+          <button id='sendbutton' type="submit" class="save btn btn-default big" name="method" value="make_invoice">Skicka</button>
+          <div id = 'message'>Initial text</div>
+        </form>
+<hr>
+
+<script type="text/javascript">
+   $(document).ready(function() {
+       $("#filterform").submit(function(event){
+       event.preventDefault();
+            $.ajax({
+                type:"POST",
+                url:"/path/to/view",
+                data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                beforeSend: function() {
+                $('#message').html("<h4>Working!</h4>")
+                $('#sendbutton').attr("disabled", true);
+                },
+                success: function(){
+                    $('#message').html("<h4>Done!</h4>") 
+                    $('#sendbutton').attr("disabled", false);
+                    },
+                error: function() { // if error occured
+                    $('#message').html("<h4>Error!</h4>") 
+                    $('#sendbutton').attr("disabled", false);
+                },
+                complete: function() { // if error occured
+                    $('#message').html("<h4>Complete!</h4>") 
+                    $('#sendbutton').attr("disabled", false);
+                },
+            });
+            return false;
+       });
+    });
+</script>
+</html>
+
